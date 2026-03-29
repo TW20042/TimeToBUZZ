@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Thread.sleep;
+
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -11,6 +13,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
@@ -21,6 +25,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Camera {
     ElapsedTime runtime = new ElapsedTime();
@@ -33,12 +38,14 @@ public class Camera {
     double err_last = 0, integral = 0, D;
     public static final boolean USE_WEBCAM = true;
     private final Position cameraPosition = new Position(DistanceUnit.INCH,
-            15, 0, 0, 0);
+            10, 0, 0, 0);
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, 20, 0, 0);
 
     AprilTagProcessor aprilTag;
     VisionPortal visionPortal;
+    ExposureControl exposure;
+    GainControl gain;
     private void initAprilTag() {
         double fx = 1447.20666452;
         double fy = 1445.36496334;
@@ -61,6 +68,22 @@ public class Camera {
         builder.enableLiveView(true);
         builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         visionPortal = builder.build();
+
+        while (L.opModeInInit() && visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            telemetry.addLine("Camera init...");
+            telemetry.update();
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        exposure = visionPortal.getCameraControl(ExposureControl.class);
+        gain = visionPortal.getCameraControl(GainControl.class);
+
+        exposure.setMode(ExposureControl.Mode.Manual);
+        exposure.setExposure(1, TimeUnit.MILLISECONDS);
+        gain.setGain(255);
     }
     public void set_processor(){
         FtcDashboard.getInstance().startCameraStream(visionPortal, 30);

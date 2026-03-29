@@ -57,7 +57,7 @@ public class TeleOp extends LinearOpMode {
 
             // Проверка стабизизации
             if(gamepad1.right_bumper){
-                axial = -(cam.get_distance()-20) * 0.029;
+                axial = -(cam.get_distance()-18) * 0.025;
                 yaw = cam.get_tag_err(0.006, 0.00025);
             }else { //without head
                 axial = x * Math.cos(l_rads) + y * Math.sin(a_rads);
@@ -74,14 +74,14 @@ public class TeleOp extends LinearOpMode {
             double rbp = axial + lateral - yaw;
 
             cannon.shoot_value = gamepad2.right_bumper;
-            cannon.ShooterPID_sync(gamepad2.left_stick_y, 725, 0.4, 0.00001, 0.075);
+            cannon.ShooterPID_sync(gamepad2.left_stick_y, 705, 0.4, 0.00001, 0.075);
             cannon.bw_control(gamepad2.right_stick_y);
 
             wheel.setMPower(rbp, rfp, lfp, lbp);
             wheel.setZPB();
-            multiple_tel.addData("s0",0);
-            multiple_tel.addData("starget speed",725);
-            multiple_tel.addData("s900",900);
+            multiple_tel.addData("S0",0);
+            multiple_tel.addData("Starget speed",725);
+            multiple_tel.addData("S900",900);
             multiple_tel.addData("Camera stabilization", gamepad1.right_bumper);
             multiple_tel.addData("Camera error", cam.get_tag_err(0.0058, 0.0001));
             multiple_tel.addData("Shooter speed", cannon.get_shooter_vel());

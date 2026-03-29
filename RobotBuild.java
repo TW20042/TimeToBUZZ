@@ -103,15 +103,17 @@ public class RobotBuild extends Robot {
     }
     public void stable_camera(double time) {//Функция поворота
         double yaw;
+        double axial = 0;
         runtime.reset();
         while (L.opModeIsActive() && runtime.milliseconds() < time) {
             //Вычисление угла стабилизации
-            yaw = cam.get_tag_err(0.0057, 0.0001);
+            axial = -(cam.get_distance()-18) * 0.021;
+            yaw = cam.get_tag_err(0.0062, 0.0001);
             //Вычисление мощности
-            double lfp = (+yaw);
-            double rfp = (-yaw);
-            double lbp = (+yaw);
-            double rbp = (-yaw);
+            double lfp = (axial+yaw);
+            double rfp = (axial-yaw);
+            double lbp = (axial+yaw);
+            double rbp = (axial-yaw);
             double grd_tel = Imu.getTurnAngle();
 
             wb.setMPower(rbp, rfp, lfp, lbp);

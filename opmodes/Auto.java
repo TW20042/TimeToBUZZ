@@ -38,8 +38,8 @@ public class Auto extends LinearOpMode {
         cam.set_processor();
         //********************************************** s0
         //______________________________________________ m1
-        r.move_xy(0, 0, 0, -53, 0, kp, ki, kd, 0.028);
-        r.stable_camera(200);
+        r.move_xy(0, 0, 0, -53, 0, 0.003, ki, kd, 0.015);
+        r.stable_camera(600);
         cannon.fw_control_np(1, 705);
         double[] detect = cam.get_position();
         r.alliance = detect[4];
@@ -48,7 +48,7 @@ public class Auto extends LinearOpMode {
         if(r.alliance == 20){
             //__________________________________________ m1
             r.turn(40, 0.02, 1000);
-            r.move_xy(0, -45, 0, 40, 40, kp, ki, kd, 0.028);
+            r.move_xy(0, -52, 0, 37, 40, kp, ki, kd, 0.028);
             cannon.bw_control(1);
             r.delay(100);
             r.move_xy(0, 0, 0, 49, 40, 0.002, ki, 0.2, 0.028);
@@ -58,12 +58,12 @@ public class Auto extends LinearOpMode {
             r.move_xy(0, 0, 0, -49, 40, 0.002, ki, 0.2, 0.028);
             r.move_xy(0, 48, 0, -30, 40, kp, ki, kd, 0.028);
             r.turn(0, 0.02, 1000);
-            r.stable_camera(200);
+            r.stable_camera(600);
         //********************************************** s2
         }else if (r.alliance == 24){
             //__________________________________________ m1
             r.turn(-38, 0.02, 1000);
-            r.move_xy(0, 45, 0, 40, -38, kp, ki, kd, 0.028);
+            r.move_xy(0, 48, 0, 38, -38, kp, ki, kd, 0.028);
             cannon.bw_control(1);
             r.delay(100);
             r.move_xy(0, 0, 0, 49, -38, 0.002, ki, 0.2, 0.028);
@@ -73,10 +73,11 @@ public class Auto extends LinearOpMode {
             r.move_xy(0, 0, 0, -30, -38, kp, ki, 0.2, 0.028);
             r.move_xy(0, -48, 0, -30, -38, kp, ki, kd, 0.028);
             r.turn(0, 0.02, 1000);
-            r.stable_camera(200);
+            r.stable_camera(600);
         }
         //********************************************** finally
         cannon.fw_control_np(1, 705);
+        r.move_xy(0, -20, 0, 0, 0, kp, ki, kd, 0.02);
         cam.stop_stream();
     }
 }

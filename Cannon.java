@@ -132,7 +132,7 @@ public class Cannon {
         });
     }
     public void ShooterPID_sync(double power, double speed, double kP, double kI, double kD){
-        double err = speed-20 - get_shooter_vel();
+        double err = speed - get_shooter_vel();
         double now = runtime.milliseconds();
 
         double dt = (now - old_t);
@@ -148,7 +148,7 @@ public class Cannon {
         I = integral * kI;
         D = differential * kD;
 
-        shooter_control(power * (P + I + D), speed-20);
+        shooter_control(power * (P + I + D), speed);
 
         err_last = err;
         old_t = now;
