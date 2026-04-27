@@ -6,12 +6,10 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Camera;
-import org.firstinspires.ftc.teamcode.Cannon;
-import org.firstinspires.ftc.teamcode.IMU;
+import org.firstinspires.ftc.teamcode.modules.Camera;
+import org.firstinspires.ftc.teamcode.modules.IMU;
 import org.firstinspires.ftc.teamcode.RobotBuild;
-import org.firstinspires.ftc.teamcode.Wheelbase;
+import org.firstinspires.ftc.teamcode.modules.Wheelbase;
 @Config
 @Autonomous(name="test_Autonomous")
 public class test_auto extends LinearOpMode {
@@ -26,12 +24,10 @@ public class test_auto extends LinearOpMode {
         IMU imu = new IMU();
         Wheelbase wheel = new Wheelbase();
         Camera cam = new Camera();
-        Cannon cannon = new Cannon();
         r.init(hardwareMap, multiple_telemetry, gamepad1,
-                gamepad2, imu, null, cam, wheel, this);
+                gamepad2, this, imu, cam, wheel);
         wheel.reset_encoders();
         wheel.telemetry_ports();
         waitForStart();
-        r.move_xy(0, 0, 0, 10, 0, kp, ki, kd, 0.012);
     }
 }

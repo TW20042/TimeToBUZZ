@@ -3,16 +3,13 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Camera;
-import org.firstinspires.ftc.teamcode.Cannon;
-import org.firstinspires.ftc.teamcode.IMU;
+import org.firstinspires.ftc.teamcode.modules.Camera;
+import org.firstinspires.ftc.teamcode.modules.IMU;
 import org.firstinspires.ftc.teamcode.RobotBuild;
-import org.firstinspires.ftc.teamcode.Wheelbase;
+import org.firstinspires.ftc.teamcode.modules.Wheelbase;
 @Config
 @TeleOp(name="test")
 public class test extends LinearOpMode {
@@ -29,12 +26,9 @@ public class test extends LinearOpMode {
         IMU imu = new IMU();
         Wheelbase wheel = new Wheelbase();
         Camera cam = new Camera();
-        Cannon cannon = new Cannon();
         r.init(hardwareMap, multiple_telemetry, gamepad1,
-                gamepad2, null, cannon, null, null, this);
+                gamepad2, this, imu, wheel, cam);
         waitForStart();
-        while(opModeIsActive()){
-            cannon.ShooterPID_sync(1, speed, kp, ki, kd);
-        }
+        while(opModeIsActive()){}
     }
 }

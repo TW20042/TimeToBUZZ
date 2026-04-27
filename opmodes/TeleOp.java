@@ -6,11 +6,10 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Camera;
-import org.firstinspires.ftc.teamcode.Cannon;
-import org.firstinspires.ftc.teamcode.IMU;
+import org.firstinspires.ftc.teamcode.modules.Camera;
+import org.firstinspires.ftc.teamcode.modules.IMU;
 import org.firstinspires.ftc.teamcode.RobotBuild;
-import org.firstinspires.ftc.teamcode.Wheelbase;
+import org.firstinspires.ftc.teamcode.modules.Wheelbase;
 import java.lang.Math;
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Main_TeleOp")
@@ -24,17 +23,14 @@ public class TeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         RobotBuild r = new RobotBuild();
         IMU imu = new IMU();
-        Cannon cannon = new Cannon();
         Camera cam = new Camera();
         Wheelbase wheel = new Wheelbase();
         r.init(hardwareMap, telemetry, gamepad1,
-                gamepad2, imu, cannon, cam, wheel, this);
+                gamepad2, this, imu, cam, wheel);
 
         wheel.telemetry_ports();
         cam.set_processor();
-        cannon.srv1_control(0.96);
         waitForStart();
-        cannon.fw_control(2000);
         while(opModeIsActive()){
             cam.telemetryAprilTag();
             double x =  gamepad1.left_stick_x * (1 - gamepad1.right_trigger);
@@ -73,10 +69,6 @@ public class TeleOp extends LinearOpMode {
             double lbp = axial - lateral + yaw;
             double rbp = axial + lateral - yaw;
 
-            cannon.shoot_value = gamepad2.right_bumper;
-            cannon.ShooterPID_sync(gamepad2.left_stick_y, 705, 0.4, 0.00001, 0.075);
-            cannon.bw_control(gamepad2.right_stick_y);
-
             wheel.setMPower(rbp, rfp, lfp, lbp);
             wheel.setZPB();
             multiple_tel.addData("S0",0);
@@ -84,12 +76,10 @@ public class TeleOp extends LinearOpMode {
             multiple_tel.addData("S900",900);
             multiple_tel.addData("Camera stabilization", gamepad1.right_bumper);
             multiple_tel.addData("Camera error", cam.get_tag_err(0.0058, 0.0001));
-            multiple_tel.addData("Shooter speed", cannon.get_shooter_vel());
             multiple_tel.addData("Distance", cam.get_distance()-20);
             multiple_tel.update();
             //wheel.telemetry_power();
         }
-        cannon.stop_shooting_process();
         cam.stop_stream();
     }
 }

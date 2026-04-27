@@ -6,34 +6,32 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.modules.Camera;
+import org.firstinspires.ftc.teamcode.modules.IMU;
+import org.firstinspires.ftc.teamcode.modules.Wheelbase;
 
-public class RobotBuild extends Robot {
+public class RobotBuild {
+    public HardwareMap hardwareMap;
+    public Telemetry telemetry;
+    public Gamepad gamepad1, gamepad2;
+    public LinearOpMode L;
+    public ElapsedTime runtime;
+    IMU Imu;
+    Wheelbase wb;
+    Camera cam;
     public double alliance;
     public void init(HardwareMap hardwareMap, Telemetry telemetry,
-                     Gamepad gamepad1, Gamepad gamepad2, IMU Imu, Cannon cnn,
-                     Camera cam, Wheelbase wheel, LinearOpMode L) {
+                     Gamepad gamepad1, Gamepad gamepad2, LinearOpMode L, Module... classes) {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         this.L = L;
         this.runtime = new ElapsedTime();
-        if (Imu != null) {
-            this.Imu = Imu;
-            Imu.init_classes(hardwareMap, telemetry, gamepad1, gamepad2, L);
-        }
-        if (cnn != null) {
-            this.cnn = cnn;
-            cnn.init_classes(hardwareMap, telemetry, gamepad1, gamepad2, L);
-        }
-        if (cam != null) {
-            this.cam = cam;
-            cam.init_classes(hardwareMap, telemetry, gamepad1, gamepad2, L);
-        }
-
-        if (wheel != null) {
-            this.wb = wheel;
-            wheel.init_classes(hardwareMap, telemetry, gamepad1, gamepad2, L);
+        for (Module clazz : classes){
+            if (clazz != null){
+                clazz.init_classes(hardwareMap, telemetry, gamepad1, gamepad2, L);
+            }
         }
     }
 
@@ -80,27 +78,6 @@ public class RobotBuild extends Robot {
         wb.setMPower(0, 0, 0, 0);
         wb.setZPB();
     }
-
-    public void turn(double grd, double kt, double time) {//Функция поворота
-        double yaw;
-        runtime.reset();
-
-        while (L.opModeIsActive() && runtime.milliseconds() < time) {
-            //Вычисление угла стабилизации
-            yaw = Imu.get_st_err(grd, kt);
-            //Вычисление мощности
-            double lfp = (+yaw);
-            double rfp = (-yaw);
-            double lbp = (+yaw);
-            double rbp = (-yaw);
-            double grd_tel = Imu.getTurnAngle();
-
-            wb.setMPower(rbp, rfp, lfp, lbp);
-            telemetry.addData("Now is (degrees):", "%4f", grd_tel);
-            telemetry.update();
-        }
-        wb.setZPB();
-    }
     public void stable_camera(double time) {//Функция поворота
         double yaw;
         double axial = 0;
@@ -123,51 +100,6 @@ public class RobotBuild extends Robot {
         wb.setMPower(0, 0, 0, 0);
         wb.setZPB();
     }
-    public void turn_simple(double grd, double angle, double kt, double time) {//Функция поворота
-        double yaw;
-        runtime.reset();
-
-        while (L.opModeIsActive() && runtime.milliseconds() < time) {
-            //Вычисление угла стабилизации
-            yaw = (grd-angle) * kt;
-            //Вычисление мощности
-            double lfp = (+yaw);
-            double rfp = (-yaw);
-            double lbp = (+yaw);
-            double rbp = (-yaw);
-            double grd_tel = Imu.getTurnAngle();
-
-            wb.setMPower(rbp, rfp, lfp, lbp);
-            telemetry.addData("Now is (degrees):", "%4f", grd_tel);
-            telemetry.update();
-        }
-        wb.setZPB();
-    }
-    public void fd(double cm, double kp){     //Функция проезда вперёд
-        wb.reset_encoders();
-        double tic_per_cm = (12.36/480)*2.54;    //коэф перевода из тиков в сантиметры
-        double ang        = Imu.getTurnAngle();
-        double axial = 1;
-        while (Math.abs(wb.get_enc_pos()) * tic_per_cm * 1.4 < cm){
-            double err = cm-(wb.get_enc_pos()*tic_per_cm);   //Формирование ошибки
-
-            double p = err * kp * -1;           //Коэф пропорциональности
-            double yaw   = Imu.get_st_err(ang, 0.012);
-
-            double lfp = (axial+yaw)*p;    //Формирование выходных значений
-            double rfp = (axial-yaw)*p;
-            double lbp = (axial+yaw)*p;
-            double rbp = (axial-yaw)*p;
-            telemetry.addData("Encoder is", wb.get_enc_pos());
-            telemetry.update();
-            stable(0, 0, ang, 100, 0.012);
-            wb.setMPower(rbp, rfp, lfp, lbp);
-        }
-        wb.setMPower(0, 0, 0, 0);
-        wb.setZPB();
-        stable(0, 0, ang, 1000, 0.012);
-    }
-
     public void move_xy(double x, double x1, double y, double y1, double angle,
                                                         double kp, double ki, double kd, double kt){
         wb.reset_encoders();
@@ -230,5 +162,12 @@ public class RobotBuild extends Robot {
         stable(0, 0, angle, 200, 0.009);
         wb.setMPower(0, 0, 0, 0);
         wb.setZPB();
+    }
+    public void delay(long millis){
+        try{
+            Thread.sleep(millis);
+        } catch (InterruptedException ex){
+            Thread.currentThread().interrupt();
+        }
     }
 }

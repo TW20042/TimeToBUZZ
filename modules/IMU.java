@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.modules;
 
-import com.qualcomm.hardware.bosch.BHI260IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,15 +12,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Module;
 
-public class IMU {
-    HardwareMap hardwareMap;
-    Telemetry telemetry;
-    Gamepad gamepad1;
-    Gamepad gamepad2;
-    LinearOpMode L;
+public class IMU extends Module {
     private BNO055IMU imu;
-    Robot R = new Robot();
+    @Override
     public void init_classes(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2,
                              LinearOpMode L){
         this.hardwareMap = hardwareMap;
@@ -39,7 +34,11 @@ public class IMU {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         while (!imu.isGyroCalibrated()) { //Калибровка акселерометра
-            R.delay(30);
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             telemetry.addData("Wait", "Calibration"); //Сообщение о калибровке
             telemetry.update();
         }
@@ -65,7 +64,11 @@ public class IMU {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
         while (!imu.isGyroCalibrated()) { //Калибровка акселерометра
-            R.delay(30);
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             telemetry.addData("Wait", "Calibration"); //Сообщение о калибровке
             telemetry.update();
         }
