@@ -40,6 +40,16 @@ public class Camera extends Module {
     VisionPortal visionPortal;
     ExposureControl exposure;
     GainControl gain;
+    @Override
+    public void init_classes(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2,
+                             LinearOpMode L){
+        this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+        this.L = L;
+        initAprilTag();
+    }
     private void initAprilTag() {
         double fx = 1447.20666452;
         double fy = 1445.36496334;
@@ -159,15 +169,5 @@ public class Camera extends Module {
         double err = pos[2];
 
         return err;
-    }
-    @Override
-    public void init_classes(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2,
-                             LinearOpMode L){
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
-        this.L = L;
-        initAprilTag();
     }
 }
