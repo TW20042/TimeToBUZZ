@@ -13,21 +13,21 @@ import org.firstinspires.ftc.teamcode.modules.Wheelbase;
 @Config
 @Autonomous(name="test_Autonomous")
 public class test_auto extends LinearOpMode {
-    public static double kd = 0.25;
-    public static double ki = 0;
-    public static double kp = 0.0021;
     MultipleTelemetry multiple_telemetry = new MultipleTelemetry(telemetry,
                     FtcDashboard.getInstance().getTelemetry());
+    RobotBuild r = new RobotBuild();
+    IMU imu = new IMU();
+    Wheelbase wheelbase = new Wheelbase();
+    Camera camera = new Camera();
+
     @Override
     public void runOpMode() {
-        RobotBuild r = new RobotBuild();
-        IMU imu = new IMU();
-        Wheelbase wheel = new Wheelbase();
-        Camera cam = new Camera();
         r.init(hardwareMap, multiple_telemetry, gamepad1,
-                gamepad2, this, imu, cam, wheel);
-        wheel.reset_encoders();
-        wheel.telemetry_ports();
+                gamepad2, this, imu, camera, wheelbase);
+        //***< log ports and reset encoders >***
+        wheelbase.reset_encoders();
+        wheelbase.telemetry_ports();
+
         waitForStart();
     }
 }

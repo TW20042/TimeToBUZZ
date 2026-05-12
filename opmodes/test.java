@@ -20,15 +20,16 @@ public class test extends LinearOpMode {
 
     MultipleTelemetry multiple_telemetry = new MultipleTelemetry(telemetry,
             FtcDashboard.getInstance().getTelemetry());
+    RobotBuild r = new RobotBuild();
+    IMU imu = new IMU();
+    Wheelbase wheelbase = new Wheelbase();
+    Camera camera = new Camera();
+
     @Override
     public void runOpMode() {
-        RobotBuild r = new RobotBuild();
-        IMU imu = new IMU();
-        Wheelbase wheel = new Wheelbase();
-        Camera cam = new Camera();
         r.init(hardwareMap, multiple_telemetry, gamepad1,
-                gamepad2, this, imu, wheel, cam);
+                gamepad2, this, imu, wheelbase, camera);
+
         waitForStart();
-        while(opModeIsActive()){}
     }
 }

@@ -20,14 +20,19 @@ public class RobotBuild {
     Wheelbase wb;
     Camera cam;
     public double alliance;
+
+    //***< initialize classes of modules >***
     public void init(HardwareMap hardwareMap, Telemetry telemetry,
                      Gamepad gamepad1, Gamepad gamepad2, LinearOpMode L, Module... classes) {
+        //***< synchronize main classes >***
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         this.L = L;
         this.runtime = new ElapsedTime();
+
+        //***< initialize classes of modules using args >***
         for (Module clazz : classes){
             if (clazz != null){
                 clazz.init_classes(hardwareMap, telemetry, gamepad1, gamepad2, L);
@@ -35,6 +40,9 @@ public class RobotBuild {
         }
     }
 
+    //**********<< Functions, that using more than one class of module >>**********
+
+    //***< IMU stabilization with a time limit >***
     public void stable(double a, double l, double stable, long time, double kt) {
         runtime.reset();
         while (L.opModeIsActive() && runtime.milliseconds() < time) {
@@ -54,6 +62,7 @@ public class RobotBuild {
         wb.setZPB();
     }
 
+    //***< IMU stabilization to an angle of 180 degrees with a time limit >***
     void stable180(double a, double l, double stable, long time, double kt) {
         runtime.reset();
         double getangle = 0;
@@ -75,6 +84,8 @@ public class RobotBuild {
         wb.setMPower(0, 0, 0, 0);
         wb.setZPB();
     }
+
+    //***< Camera stabilization with a time limit >***
     public void stable_camera(double time) {//Функция поворота
         double yaw;
         double axial = 0;
@@ -97,6 +108,8 @@ public class RobotBuild {
         wb.setMPower(0, 0, 0, 0);
         wb.setZPB();
     }
+
+    //***< two-axis moving with encoders >***
     public void move_xy(double x, double x1, double y, double y1, double angle,
                                                         double kp, double ki, double kd, double kt){
         wb.reset_encoders();
@@ -160,6 +173,8 @@ public class RobotBuild {
         wb.setMPower(0, 0, 0, 0);
         wb.setZPB();
     }
+
+    //***< delay function that catching IE >***
     public void delay(long millis){
         try{
             Thread.sleep(millis);

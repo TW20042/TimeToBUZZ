@@ -13,8 +13,12 @@ public abstract class Module {
     protected Telemetry telemetry;
     protected Gamepad gamepad1, gamepad2;
     public LinearOpMode L;
+
+    //***< all the classes need to have this method to initialize them in RobotBuild >***
     public abstract void init_classes(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2,
                       LinearOpMode L);
+
+    //**< as sleep, but catching InterruptedException >***
     public void delay(long millis){
         try {
             Thread.sleep(millis);

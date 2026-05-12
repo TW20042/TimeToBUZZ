@@ -41,15 +41,21 @@ public class IMU extends Module {
         telemetry.addData("Done!", "Calibrated"); //Сообщение об окончании калибровки
         telemetry.update();
     }
+
+    //***< get an angle >***
     public double getTurnAngle() {
         //получить текущий угол поворота
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         Acceleration gravity = imu.getGravity();
         return angles.firstAngle;
     }
+
+    //***< find P-regulator stabilization error >***
     public double get_st_err(double stable, double kt) {
         return -(stable-getTurnAngle())*kt;
     }
+
+    //***< calibrate IMU
     public void calibrate_imu(){
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -58,13 +64,13 @@ public class IMU extends Module {
         parameters.loggingEnabled      = true;
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        imu.initialize(parameters);
-        while (!imu.isGyroCalibrated()) { //Калибровка акселерометра
+        imu.initialize(parameters); // Start initializing IMU
+        while (!imu.isGyroCalibrated()) { //wait for calibration
             delay(30);
-            telemetry.addData("Wait", "Calibration"); //Сообщение о калибровке
+            telemetry.addData("Wait", "Calibration");
             telemetry.update();
         }
-        telemetry.addData("Done!", "Calibrated"); //Сообщение об окончании калибровки
+        telemetry.addData("Done!", "Calibrated"); //log a calibration message
         telemetry.update();
     }
 }

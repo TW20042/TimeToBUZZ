@@ -15,24 +15,24 @@ import org.firstinspires.ftc.teamcode.modules.Wheelbase;
 @Config
 @Autonomous(name = "Main_Autonomous")
 public class Auto extends LinearOpMode {
-    MultipleTelemetry multi_telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(),
+    MultipleTelemetry multiple_telemetry = new MultipleTelemetry(FtcDashboard.getInstance().getTelemetry(),
                                                                                             telemetry);
     ElapsedTime runtime = new ElapsedTime();
-    public static double kd = 0.29;
-    public static double ki = 0;
-    public static double kp = 0.0035;
+    RobotBuild r = new RobotBuild();
+    Camera camera = new Camera();
+    Wheelbase wheelbase = new Wheelbase();
+    IMU imu = new IMU();
+
     @Override
     public void runOpMode() {
-        RobotBuild r = new RobotBuild();
-        Camera cam = new Camera();
-        Wheelbase wheel = new Wheelbase();
-        IMU imu = new IMU();
-        r.init(hardwareMap, multi_telemetry, gamepad1,
-                gamepad2, this, imu, cam, wheel);
+        r.init(hardwareMap, multiple_telemetry, gamepad1,
+                gamepad2, this, imu, camera, wheelbase);
 
-        wheel.reset_encoders();
+        //***< log ports and start stream >***
+        wheelbase.reset_encoders();
+        camera.set_processor();
+
         waitForStart();
-        cam.set_processor();
 
     }
 }
