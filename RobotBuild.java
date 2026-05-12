@@ -58,12 +58,9 @@ public class RobotBuild {
         runtime.reset();
         double getangle = 0;
         while (L.opModeIsActive() && runtime.milliseconds() < time) {
-            if (Imu.getTurnAngle() > 0) {
-                getangle = stable - Imu.getTurnAngle();
-            }
-            if (Imu.getTurnAngle() < 0) {
-                getangle = -stable - Imu.getTurnAngle();
-            }
+            int sign = Integer.signum((int) Imu.getTurnAngle());
+            getangle = (sign * stable) - Imu.getTurnAngle();
+
             double axial = a;
             double lateral = l;
             double yaw = getangle * kt;

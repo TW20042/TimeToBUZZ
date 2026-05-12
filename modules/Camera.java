@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules;
 
-import static java.lang.Thread.sleep;
-
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -76,11 +74,7 @@ public class Camera extends Module {
         while (L.opModeInInit() && visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             telemetry.addLine("Camera init...");
             telemetry.update();
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            delay(20);
         }
         exposure = visionPortal.getCameraControl(ExposureControl.class);
         gain = visionPortal.getCameraControl(GainControl.class);

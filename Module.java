@@ -15,4 +15,11 @@ public abstract class Module {
     public LinearOpMode L;
     public abstract void init_classes(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2,
                       LinearOpMode L);
+    public void delay(long millis){
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

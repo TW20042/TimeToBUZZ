@@ -34,11 +34,7 @@ public class IMU extends Module {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         while (!imu.isGyroCalibrated()) { //Калибровка акселерометра
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            delay(30);
             telemetry.addData("Wait", "Calibration"); //Сообщение о калибровке
             telemetry.update();
         }
@@ -64,11 +60,7 @@ public class IMU extends Module {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
         while (!imu.isGyroCalibrated()) { //Калибровка акселерометра
-            try {
-                Thread.sleep(30);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            delay(30);
             telemetry.addData("Wait", "Calibration"); //Сообщение о калибровке
             telemetry.update();
         }
