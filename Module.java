@@ -8,7 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public abstract class Module {
+    // module abstract
     protected ElapsedTime runtime = new ElapsedTime();
+
     protected HardwareMap hardwareMap;
     protected Telemetry telemetry;
     protected Gamepad gamepad1, gamepad2;
