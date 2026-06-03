@@ -25,7 +25,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
+//Camera
 public class Camera extends Module {
     public boolean[] USE_LIMELIGHT = { false };
     public boolean[] USE_WEB = { false };

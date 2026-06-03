@@ -8,7 +8,7 @@ import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
+//Odometry constants
 public class Constants {
     public static FollowerConstants followerConstants(){
         return new FollowerConstants()
