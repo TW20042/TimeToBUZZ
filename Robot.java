@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.modules.abstractions.Encoder;
 import org.firstinspires.ftc.teamcode.modules.abstractions.IMU;
 import org.firstinspires.ftc.teamcode.modules.abstractions.Wheelbase;
 import org.firstinspires.ftc.teamcode.systems.EncodersSystem;
+import org.firstinspires.ftc.teamcode.systems.MovingSystem;
 import org.firstinspires.ftc.teamcode.systems.StabilizationSystem;
 import org.firstinspires.ftc.teamcode.systems.VisionSystem;
 import org.firstinspires.ftc.teamcode.systems.WithoutHeadSystem;
@@ -30,28 +31,26 @@ public class Robot extends RobotContext{
     public Robot setCamera(Camera camera){
         this.camera = camera;
         camera.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.visionSystem = new VisionSystem(camera);
         return this;
     }
     public Robot setWheelbase(Wheelbase wheelbase){
         this.wheelbase = wheelbase;
         wheelbase.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.movingSystem = new MovingSystem(wheelbase);
         return this;
     }
     public Robot setImu(IMU imu){
         this.imu = imu;
         imu.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.stabilizationSystem = new StabilizationSystem(imu);
+        this.withoutHeadSystem = new WithoutHeadSystem(imu);
         return this;
     }
     public Robot setEncoders(Encoder encoders){
         this.encoders = encoders;
         encoders.initClasses(hardwareMap, telemetry, linearOpMode);
-        return this;
-    }
-    public Robot buildSystems(){
-        this.stabilizationSystem = new StabilizationSystem(imu);
-        this.localizationSystem = new EncodersSystem(encoders);
-        this.visionSystem = new VisionSystem(camera);
-        this.withoutHeadSystem = new WithoutHeadSystem(imu);
+        this.encodersSystem = new EncodersSystem(encoders);
         return this;
     }
     public void doAction(Action action){

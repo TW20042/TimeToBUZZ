@@ -19,8 +19,7 @@ public class Autonomous extends LinearOpMode {
         Robot robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, this)
                 .setEncoders(encoders)
                 .setWheelbase(wheelbase)
-                .setImu(imu)
-                .buildSystems();
+                .setImu(imu);
 
         robot.doAction(new MoveEncoders(new Point(0, 0, 0), new Point(10, 10, 0)));
     }

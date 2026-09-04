@@ -16,8 +16,7 @@ public class TeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot(hardwareMap, telemetry, gamepad1, gamepad2, this)
                 .setWheelbase(wheelbase)
-                .setImu(imu)
-                .buildSystems();
+                .setImu(imu);
 
         waitForStart();
         while(opModeIsActive()){

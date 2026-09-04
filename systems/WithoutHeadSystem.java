@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.systems;
 import org.firstinspires.ftc.teamcode.modules.abstractions.IMU;
 
 public class WithoutHeadSystem {
-    public IMU imu;
+    private IMU imu;
     double axial = 0, lateral = 0;
     public WithoutHeadSystem(IMU imu){
         if(imu != null){
@@ -14,7 +14,7 @@ public class WithoutHeadSystem {
 
         //***< calculate angular data for headless mode >***
         double deg = imu.getAngle();
-        double l_alpha = 90 + deg;
+        double l_alpha = 90 - deg;
         double a_alpha = 90 - deg;
 
         //***< and convert it to radians >***

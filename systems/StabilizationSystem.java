@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.systems;
 import org.firstinspires.ftc.teamcode.modules.abstractions.IMU;
 
 public class StabilizationSystem {
-    IMU imu;
+    private IMU imu;
     double lastError = 0;
     public StabilizationSystem(IMU imu){
         if(imu != null){

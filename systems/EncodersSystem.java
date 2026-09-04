@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.modules.abstractions.Encoder;
 import org.firstinspires.ftc.teamcode.modules.realizes.localization.Point;
 
 public class EncodersSystem {
-    Encoder encoders;
+    private Encoder encoders;
     ElapsedTime runtime = new ElapsedTime();
     public double s = 0, sx = 0, sy = 0;
     double old_t = 0, integral = 0, lastError = 0;
@@ -52,11 +52,10 @@ public class EncodersSystem {
 
         double axial    = sy/s * (p + i + d);
         double lateral  = sx/s * (p + i + d);
-        double yaw      = headingError;
 
         lastError = error;
         old_t = now;
 
-        return new double[] {axial, lateral, yaw};
+        return new double[] {axial, lateral, headingError};
     }
 }

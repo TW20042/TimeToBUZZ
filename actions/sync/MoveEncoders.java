@@ -6,12 +6,13 @@ import org.firstinspires.ftc.teamcode.modules.abstractions.Encoder;
 import org.firstinspires.ftc.teamcode.modules.abstractions.Wheelbase;
 import org.firstinspires.ftc.teamcode.modules.realizes.localization.Point;
 import org.firstinspires.ftc.teamcode.systems.EncodersSystem;
+import org.firstinspires.ftc.teamcode.systems.MovingSystem;
 import org.firstinspires.ftc.teamcode.systems.StabilizationSystem;
 
 public class MoveEncoders extends Action {
     EncodersSystem encodersSystem;
     StabilizationSystem stabilizationSystem;
-    Wheelbase wheelbase;
+    MovingSystem movingSystem;
     Encoder encoder;
     private final Point startPoint;
     private final Point endPoint;
@@ -24,7 +25,7 @@ public class MoveEncoders extends Action {
         this.encodersSystem = robotContext.encodersSystem;
         this.stabilizationSystem = robotContext.stabilizationSystem;
         this.encoder = robotContext.encoders;
-        this.wheelbase = robotContext.wheelbase;
+        this.movingSystem = robotContext.movingSystem;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class MoveEncoders extends Action {
         while (encoder.getDistance() < encodersSystem.s){
             double heading = stabilizationSystem.getTurnPD(endPoint.getHeading(), 0.1, 0);
             double[] axes = encodersSystem.getDistancePID(0.1, 0, 0, heading);
-            wheelbase.drive(axes[0], axes[1], axes[2]);
+            movingSystem.move(axes[0], axes[1], axes[2]);
         }
     }
 }

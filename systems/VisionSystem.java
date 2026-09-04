@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.systems;
 import org.firstinspires.ftc.teamcode.modules.abstractions.Camera;
 
 public class VisionSystem {
-    Camera camera;
+    private Camera camera;
     double lastError = 0;
     public VisionSystem(Camera camera){
         if(camera != null){
