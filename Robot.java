@@ -5,16 +5,20 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.actions.Action;
+import org.firstinspires.ftc.teamcode.actions.AsyncAction;
+import org.firstinspires.ftc.teamcode.actions.LoopAction;
+import org.firstinspires.ftc.teamcode.actions.SyncAction;
 import org.firstinspires.ftc.teamcode.modules.abstractions.Camera;
-import org.firstinspires.ftc.teamcode.modules.abstractions.Encoder;
 import org.firstinspires.ftc.teamcode.modules.abstractions.IMU;
 import org.firstinspires.ftc.teamcode.modules.abstractions.Wheelbase;
-import org.firstinspires.ftc.teamcode.systems.EncodersSystem;
-import org.firstinspires.ftc.teamcode.systems.MovingSystem;
-import org.firstinspires.ftc.teamcode.systems.StabilizationSystem;
-import org.firstinspires.ftc.teamcode.systems.VisionSystem;
-import org.firstinspires.ftc.teamcode.systems.WithoutHeadSystem;
+import org.firstinspires.ftc.teamcode.modules.realizes.secondary.Grab;
+import org.firstinspires.ftc.teamcode.modules.realizes.secondary.Shooter;
+import org.firstinspires.ftc.teamcode.systems.System;
+import org.firstinspires.ftc.teamcode.systems.moving.MovingSystem;
+import org.firstinspires.ftc.teamcode.systems.moving.StabilizationSystem;
+import org.firstinspires.ftc.teamcode.systems.localization.VisionSystem;
+import org.firstinspires.ftc.teamcode.systems.secondary.GrabSystem;
+import org.firstinspires.ftc.teamcode.systems.secondary.ShootingSystem;
 
 public class Robot extends RobotContext{
     HardwareMap hardwareMap;
@@ -27,34 +31,67 @@ public class Robot extends RobotContext{
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         this.linearOpMode = linearOpMode;
+        this.actionScheduler = new ActionScheduler();
     }
     public Robot setCamera(Camera camera){
         this.camera = camera;
         camera.initClasses(hardwareMap, telemetry, linearOpMode);
-        this.visionSystem = new VisionSystem(camera);
+        this.visionSystem = new VisionSystem(this);
+        addSystem(visionSystem);
         return this;
     }
     public Robot setWheelbase(Wheelbase wheelbase){
         this.wheelbase = wheelbase;
         wheelbase.initClasses(hardwareMap, telemetry, linearOpMode);
-        this.movingSystem = new MovingSystem(wheelbase);
+        this.movingSystem = new MovingSystem(this);
+        addSystem(movingSystem);
         return this;
     }
     public Robot setImu(IMU imu){
         this.imu = imu;
         imu.initClasses(hardwareMap, telemetry, linearOpMode);
-        this.stabilizationSystem = new StabilizationSystem(imu);
-        this.withoutHeadSystem = new WithoutHeadSystem(imu);
+        this.stabilizationSystem = new StabilizationSystem(this);
+        addSystem(stabilizationSystem);
         return this;
     }
-    public Robot setEncoders(Encoder encoders){
-        this.encoders = encoders;
-        encoders.initClasses(hardwareMap, telemetry, linearOpMode);
-        this.encodersSystem = new EncodersSystem(encoders);
+    public Robot buildSecondary(){
+        this.shooter = new Shooter();
+        this.grab = new Grab();
+        this.shooter.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.grab.initClasses(hardwareMap, telemetry, linearOpMode);
+
+        this.shootingSystem = new ShootingSystem(this);
+        this.grabSystem = new GrabSystem(this);
+        addSystem(shootingSystem);
+        addSystem(grabSystem);
+
         return this;
     }
-    public void doAction(Action action){
+    public void doAction(SyncAction action){
         action.setContext(this);
-        action.execute();
+        actionScheduler.addAction(action);
+    }
+    public void doAction(AsyncAction action){
+        action.setContext(this);
+        actionScheduler.addAction(action);
+    }
+    public void doAction(LoopAction action){
+        action.setContext(this);
+        actionScheduler.addAction(action);
+    }
+    public void update(){
+        actionScheduler.updateActions();
+        for(System system : systems){
+            system.update();
+        }
+    }
+    public void stop(){
+        actionScheduler.stop();
+    }
+    public void addSystem(System system){
+        systems.add(system);
+    }
+    public boolean isFinished(){
+        return actionScheduler.isFinished();
     }
 }

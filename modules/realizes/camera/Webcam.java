@@ -86,18 +86,18 @@ public class Webcam extends Camera {
     public double[] getRawPos() {
         double x = 0, z = 0;
         double id = 0;
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# AprilTags Detected", currentDetections.size());
-        for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null) {
-                // Only use tags that don't have Obelisk in them
-                if (!detection.metadata.name.contains("Obelisk")) {
-                    x = detection.ftcPose.x * 2.54;
-                    z = detection.ftcPose.z * 2.54;
-                }
-                id = detection.id;
-            }
-        }
+//        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+//        telemetry.addData("# AprilTags Detected", currentDetections.size());
+//        for (AprilTagDetection detection : currentDetections) {
+//            if (detection.metadata != null) {
+//                // Only use tags that don't have Obelisk in them
+//                if (!detection.metadata.name.contains("Obelisk")) {
+//                    x = detection.ftcPose.x * 2.54;
+//                    z = detection.ftcPose.z * 2.54;
+//                }
+//                id = detection.id;
+//            }
+//        }
         return new double[] {x, z, id};
     }
 

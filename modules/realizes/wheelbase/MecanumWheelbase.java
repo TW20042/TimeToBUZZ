@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.modules.abstractions.Wheelbase;
+import org.firstinspires.ftc.teamcode.utils.Benchmark;
 
 public class MecanumWheelbase extends Wheelbase {
     DcMotor leftFront;
@@ -16,15 +17,18 @@ public class MecanumWheelbase extends Wheelbase {
     @Override
     public void drive(double axial, double lateral, double yaw) {
 
-        double leftFrontPower = axial + lateral + yaw;
-        double rightFrontPower = axial - lateral - yaw;
-        double leftBackPower = axial - lateral + yaw;
-        double rightBackPower = axial + lateral - yaw;
+        double frontLeftPower  = axial + lateral + yaw;
+        double frontRightPower = axial - lateral + yaw;
+        double backLeftPower   = axial - lateral - yaw;
+        double backRightPower  = axial + lateral - yaw;
 
-        leftFront.setPower(leftFrontPower);
-        leftBack.setPower(leftBackPower);
-        rightFront.setPower(rightFrontPower);
-        rightBack.setPower(rightBackPower);
+        float start = Benchmark.getSnapshot();
+        leftFront.setPower(frontLeftPower);
+        leftBack.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightBack.setPower(backRightPower);
+        float end = Benchmark.getSnapshot();
+        float compareResult = Benchmark.compareSnapshots(start, end);
     }
     @Override
     public void initClasses(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode L) {
@@ -35,8 +39,8 @@ public class MecanumWheelbase extends Wheelbase {
         rightFront = hardwareMap.get(DcMotor.class, "rf");
         leftFront = hardwareMap.get(DcMotor.class, "lf");
         leftBack = hardwareMap.get(DcMotor.class, "lb");
-        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 
