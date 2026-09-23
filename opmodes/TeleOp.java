@@ -29,6 +29,7 @@ public class TeleOp extends LinearOpMode {
         robot.doAction(new GrabControl());
         robot.doAction(new ShooterControl());
         robot.doAction(new RobotCentricControl());
+
         Benchmark.clearSnapshots();
         Benchmark.setSnapshotLimit(5000);
 
