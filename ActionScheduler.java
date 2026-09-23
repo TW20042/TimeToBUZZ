@@ -26,7 +26,11 @@ public class ActionScheduler {
         executorService.submit(() -> {
             try {
                 action.start();
+                while(!action.isFinished()){
+                    action.update();
+                }
             } finally {
+                action.stop();
                 actionCounter.decrementAndGet();
             }
         });

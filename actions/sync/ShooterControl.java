@@ -3,9 +3,7 @@ package org.firstinspires.ftc.teamcode.actions.sync;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.RobotContext;
-import org.firstinspires.ftc.teamcode.actions.Action;
 import org.firstinspires.ftc.teamcode.actions.LoopAction;
-import org.firstinspires.ftc.teamcode.systems.secondary.GrabSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.ShootingSystem;
 
 public class ShooterControl extends LoopAction {
