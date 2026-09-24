@@ -24,10 +24,10 @@ public class MecanumWheelbase extends Wheelbase {
 
         float start = Benchmark.getSnapshot();
         leftFront.setPower(frontLeftPower);
+        float end = Benchmark.getSnapshot();
         leftBack.setPower(backLeftPower);
         rightFront.setPower(frontRightPower);
         rightBack.setPower(backRightPower);
-        float end = Benchmark.getSnapshot();
         float compareResult = Benchmark.compareSnapshots(start, end);
     }
     @Override
