@@ -2,26 +2,27 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.actions.tests.TestWheelbase;
-import org.firstinspires.ftc.teamcode.modules.realizes.imu.ImuBNO055;
 import org.firstinspires.ftc.teamcode.modules.realizes.wheelbase.MecanumWheelbase;
-import org.firstinspires.ftc.teamcode.utils.Benchmark;
-import org.firstinspires.ftc.teamcode.utils.BenchmarkStats;
+import org.firstinspires.ftc.teamcode.utils.benchmark.Benchmark;
+import org.firstinspires.ftc.teamcode.utils.benchmark.BenchmarkStats;
+
+import java.util.List;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="testTeleOp")
+@Photon
 public class testTeleOp extends LinearOpMode {
     MecanumWheelbase wheelbase = new MecanumWheelbase();
-    ImuBNO055 imu = new ImuBNO055();
     MultipleTelemetry multi_telemetry = new MultipleTelemetry(telemetry,
             FtcDashboard.getInstance().getTelemetry());
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         Robot robot = new Robot(hardwareMap, multi_telemetry, gamepad1, gamepad2, this)
                 .setWheelbase(wheelbase)
-                .setImu(imu)
                 .buildSecondary();
 
         robot.doAction(new TestWheelbase());
@@ -30,18 +31,20 @@ public class testTeleOp extends LinearOpMode {
         Benchmark.setSnapshotLimit(5000);
 
         waitForStart();
-
-        while(opModeIsActive() && !robot.isFinished()){
-            double angle = imu.getAngle();
-            multi_telemetry.addData("Angle: ", angle);
+        List<Float> snapshots = Benchmark.getSnapshots();
+        while(opModeIsActive() && !robot.isFinished() && snapshots.size() < 5000){
+            snapshots = Benchmark.getSnapshots();
+            if (!snapshots.isEmpty()) {
+                multi_telemetry.addData("Snapshot ", snapshots.get(snapshots.size() - 1));
+            }
             multi_telemetry.update();
             robot.update();
         }
 
         Benchmark.sortSnapshots();
-        BenchmarkStats.toMillis();
         multi_telemetry.addData("Median: ", BenchmarkStats.getMedian());
         multi_telemetry.addData("p90: ", BenchmarkStats.getPercentStat(0.9F));
+        multi_telemetry.addData("p99: ", BenchmarkStats.getPercentStat(0.99F));
         multi_telemetry.addData("max: ", BenchmarkStats.getMax());
         multi_telemetry.update();
 
