@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.modules.realizes.wheelbase;
 
 import com.outoftheboxrobotics.photoncore.hardware.motor.PhotonDcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -11,14 +12,27 @@ import org.firstinspires.ftc.teamcode.modules.abstractions.Wheelbase;
 public class MecanumWheelbase extends Wheelbase {
     PhotonDcMotor leftFront;
     PhotonDcMotor leftBack;
-    public PhotonDcMotor rightFront;
+    PhotonDcMotor rightFront;
     PhotonDcMotor rightBack;
     @Override
     public void drive(double axial, double lateral, double yaw) {
         double frontLeftPower  = axial + lateral + yaw;
-        double frontRightPower = axial - lateral + yaw;
-        double backLeftPower   = axial - lateral - yaw;
+        double frontRightPower = axial - lateral - yaw;
+        double backLeftPower   = axial - lateral + yaw;
         double backRightPower  = axial + lateral - yaw;
+
+        // Normalize the values so no wheel power exceeds 100%
+        // This ensures that the robot maintains the desired motion.
+        double max = Math.max(Math.abs(frontLeftPower), Math.abs(frontRightPower));
+        max = Math.max(max, Math.abs(backLeftPower));
+        max = Math.max(max, Math.abs(backRightPower));
+
+        if (max > 1.0) {
+            frontLeftPower  /= max;
+            frontRightPower /= max;
+            backLeftPower   /= max;
+            backRightPower  /= max;
+        }
 
         leftFront.setPower(frontLeftPower);
         leftBack.setPower(backLeftPower);
@@ -35,8 +49,14 @@ public class MecanumWheelbase extends Wheelbase {
         leftFront = (PhotonDcMotor) hardwareMap.dcMotor.get("lf");
         leftBack = (PhotonDcMotor) hardwareMap.dcMotor.get("lb");
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setMode(PhotonDcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
 
