@@ -34,4 +34,14 @@ public class TestWheelbase extends LoopAction {
         return gamepad1.cross;
     }
 
+    @Override
+    public boolean isFailed() {
+        return false;
+    }
+
+    @Override
+    public void doIfFailed() {
+
+    }
+
 }

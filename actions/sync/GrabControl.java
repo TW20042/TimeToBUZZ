@@ -30,4 +30,14 @@ public class GrabControl extends LoopAction {
     public boolean isFinished() {
         return false;
     }
+
+    @Override
+    public boolean isFailed() {
+        return false;
+    }
+
+    @Override
+    public void doIfFailed() {
+
+    }
 }

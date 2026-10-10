@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.actions.Action;
 import org.firstinspires.ftc.teamcode.actions.AsyncAction;
 import org.firstinspires.ftc.teamcode.actions.LoopAction;
 import org.firstinspires.ftc.teamcode.actions.SyncAction;
@@ -27,7 +28,7 @@ public class ActionScheduler {
             try {
                 action.start();
                 while(!action.isFinished()){
-                    action.update();
+                    updateWithFailsafe(action);
                 }
             } finally {
                 action.stop();
@@ -40,10 +41,6 @@ public class ActionScheduler {
         action.start();
         loopActions.add(action);
     }
-    public void updateActions(){
-        updateSyncActions();
-        updateLoopActions();
-    }
     void updateLoopActions(){
         for (int i = 0; i < loopActions.size(); i++){
             LoopAction loopAction = loopActions.get(i);
@@ -53,7 +50,7 @@ public class ActionScheduler {
                 actionCounter.decrementAndGet();
                 i--;
             } else {
-                loopAction.update();
+                updateWithFailsafe(loopAction);
             }
         }
     }
@@ -65,13 +62,22 @@ public class ActionScheduler {
         SyncAction currentAction = syncActions.get(0);
 
         if (!currentAction.isFinished()) {
-            currentAction.update();
+            updateWithFailsafe(currentAction);
             return;
         }
 
         currentAction.stop();
         syncActions.remove(0);
         actionCounter.decrementAndGet();
+    }
+    public void updateActions(){
+        updateSyncActions();
+        updateLoopActions();
+    }
+    public void updateWithFailsafe(Action action){
+        if(action.isFailed()){
+            action.doIfFailed();
+        } else action.update();
     }
     public boolean isFinished(){
         return actionCounter.get() == 0;

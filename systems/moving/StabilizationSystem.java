@@ -10,6 +10,7 @@ public class StabilizationSystem extends System {
     private double angle, kp, kd;
     public double out = 0;
     public StabilizationSystem(RobotContext context){
+
         this.imu = context.imu;
     }
     public void setTurnPD(double angle, double kp, double kd){
@@ -18,12 +19,16 @@ public class StabilizationSystem extends System {
         this.kd = kd;
     }
 
-    public void update(){
+    public void calculatePD(){
         double error = -(angle - imu.getAngle());
 
         double p = error * kp;
         double d = (error - lastError) * kd;
 
         out =  p + d;
+    }
+
+    public void update(){
+        calculatePD();
     }
 }
