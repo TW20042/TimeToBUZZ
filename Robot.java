@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.modules.realizes.secondary.Grab;
 import org.firstinspires.ftc.teamcode.modules.realizes.secondary.Shooter;
 import org.firstinspires.ftc.teamcode.systems.System;
 import org.firstinspires.ftc.teamcode.systems.moving.MovingSystem;
+import org.firstinspires.ftc.teamcode.systems.moving.PedroMovingSystem;
 import org.firstinspires.ftc.teamcode.systems.moving.StabilizationSystem;
 import org.firstinspires.ftc.teamcode.systems.localization.VisionSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.GrabSystem;
@@ -52,6 +53,11 @@ public class Robot extends RobotContext{
         imu.initClasses(hardwareMap, telemetry, linearOpMode);
         this.stabilizationSystem = new StabilizationSystem(this);
         addSystem(stabilizationSystem);
+        return this;
+    }
+    public Robot setOdometry(){
+        this.pedroMovingSystem = new PedroMovingSystem(hardwareMap);
+        addSystem(pedroMovingSystem);
         return this;
     }
     public Robot buildSecondary(){

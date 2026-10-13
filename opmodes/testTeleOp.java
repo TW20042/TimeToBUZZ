@@ -32,7 +32,7 @@ public class testTeleOp extends LinearOpMode {
 
         waitForStart();
         List<Float> snapshots = Benchmark.getSnapshots();
-        while(opModeIsActive() && !robot.isFinished() && snapshots.size() < 5000){
+        while(opModeIsActive() && robot.isFinished() && snapshots.size() < 5000){
             snapshots = Benchmark.getSnapshots();
             if (!snapshots.isEmpty()) {
                 multi_telemetry.addData("Snapshot ", snapshots.get(snapshots.size() - 1));

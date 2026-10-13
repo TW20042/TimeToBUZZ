@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.modules.realizes.secondary.Grab;
 import org.firstinspires.ftc.teamcode.modules.realizes.secondary.Shooter;
 import org.firstinspires.ftc.teamcode.systems.System;
 import org.firstinspires.ftc.teamcode.systems.moving.MovingSystem;
+import org.firstinspires.ftc.teamcode.systems.moving.PedroMovingSystem;
 import org.firstinspires.ftc.teamcode.systems.moving.StabilizationSystem;
 import org.firstinspires.ftc.teamcode.systems.localization.VisionSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.GrabSystem;
@@ -32,6 +33,7 @@ public class RobotContext {
     public StabilizationSystem stabilizationSystem;
     public VisionSystem visionSystem;
     public MovingSystem movingSystem;
+    public PedroMovingSystem pedroMovingSystem;
 }
 
 
