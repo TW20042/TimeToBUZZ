@@ -10,4 +10,4 @@ include ':FtcRobotController'
 include ':TeamCode'
 include(":PhotonCore")
 project(":PhotonCore").projectDir =
-        file("../PhotonFTC/PhotonCore")
+        file("./PhotonFTC/PhotonCore")
