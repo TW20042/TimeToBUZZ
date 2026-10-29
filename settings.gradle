@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+include ':FtcRobotController'
+include ':TeamCode'
+include(":PhotonCore")
+project(":PhotonCore").projectDir =
+        file("../PhotonFTC/PhotonCore")
