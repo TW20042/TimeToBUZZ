@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.modules.abstractions.Camera;
 import org.firstinspires.ftc.teamcode.modules.abstractions.IMU;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.systems.moving.StabilizationSystem;
 import org.firstinspires.ftc.teamcode.systems.localization.VisionSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.GrabSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.ShootingSystem;
+import org.firstinspires.ftc.teamcode.systems.secondary.TurretSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +29,17 @@ public class RobotContext {
     public Wheelbase wheelbase;
     public SecondaryMotor shooter;
     public SecondaryMotor grab;
+    public SecondaryMotor turret;
     public GrabSystem grabSystem;
     public ShootingSystem shootingSystem;
+    public TurretSystem turretSystem;
     public Gamepad gamepad1;
     public Gamepad gamepad2;
     public StabilizationSystem stabilizationSystem;
     public VisionSystem visionSystem;
     public MovingSystem movingSystem;
     public PedroMovingSystem pedroMovingSystem;
+    public HardwareMap hardwareMap;
 }
 
 

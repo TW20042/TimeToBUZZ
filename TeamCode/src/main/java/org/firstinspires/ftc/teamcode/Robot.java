@@ -21,9 +21,9 @@ import org.firstinspires.ftc.teamcode.systems.moving.StabilizationSystem;
 import org.firstinspires.ftc.teamcode.systems.localization.VisionSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.GrabSystem;
 import org.firstinspires.ftc.teamcode.systems.secondary.ShootingSystem;
+import org.firstinspires.ftc.teamcode.systems.secondary.TurretSystem;
 
 public class Robot extends RobotContext{
-    HardwareMap hardwareMap;
     Telemetry telemetry;
     LinearOpMode linearOpMode;
     public Robot(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2,
@@ -66,6 +66,24 @@ public class Robot extends RobotContext{
         this.shooter.initClasses(hardwareMap, telemetry, linearOpMode);
         this.shootingSystem = new ShootingSystem(this);
         addSystem(shootingSystem);
+        return this;
+    }
+    public Robot buildShooter(SecondaryMotor shooter, SecondaryMotor turret){
+        this.shooter = shooter;
+        this.turret = turret;
+        this.shooter.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.turret.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.shootingSystem = new ShootingSystem(this);
+        this.turretSystem = new TurretSystem(this);
+        addSystem(shootingSystem);
+        addSystem(turretSystem);
+        return this;
+    }
+    public Robot buildTurretOnly(SecondaryMotor turret){
+        this.turret = turret;
+        this.turret.initClasses(hardwareMap, telemetry, linearOpMode);
+        this.turretSystem = new TurretSystem(this);
+        addSystem(turretSystem);
         return this;
     }
     public Robot buildGrab(SecondaryMotor grab){
