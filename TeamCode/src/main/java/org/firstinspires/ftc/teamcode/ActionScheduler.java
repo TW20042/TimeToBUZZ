@@ -12,13 +12,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActionScheduler {
-    AtomicInteger actionCounter = new AtomicInteger();
+    public AtomicInteger actionCounter = new AtomicInteger();
     ExecutorService executorService = Executors.newCachedThreadPool();
     final List<LoopAction> loopActions = new ArrayList<>();
     final List<SyncAction> syncActions = new ArrayList<>();
     public void addAction(SyncAction action){
         actionCounter.incrementAndGet();
-        action.start();
         syncActions.add(action);
     }
     public void addAction(AsyncAction action){
@@ -61,6 +60,10 @@ public class ActionScheduler {
 
         SyncAction currentAction = syncActions.get(0);
 
+        if(!currentAction.isStarted){
+            currentAction.start();
+            currentAction.isStarted = true;
+        }
         if (!currentAction.isFinished()) {
             updateWithFailsafe(currentAction);
             return;

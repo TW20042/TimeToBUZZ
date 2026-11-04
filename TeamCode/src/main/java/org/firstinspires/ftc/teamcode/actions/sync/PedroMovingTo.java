@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.actions.sync;
 
 import com.pedropathing.paths.Path;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotContext;
 import org.firstinspires.ftc.teamcode.actions.SyncAction;
 import org.firstinspires.ftc.teamcode.systems.moving.PedroMovingSystem;
@@ -24,12 +25,15 @@ public class PedroMovingTo extends SyncAction {
 
     @Override
     public void update() {
-
     }
 
     @Override
     public void stop() {
-
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
