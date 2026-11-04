@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.systems.secondary.TurretSystem;
 public class TurretControl extends LoopAction {
     TurretSystem turretSystem;
     Gamepad gamepad2;
+    public static double target;
     @Override
     public void setContext(RobotContext robotContext) {
         this.turretSystem = robotContext.turretSystem;
@@ -24,6 +25,7 @@ public class TurretControl extends LoopAction {
 
     @Override
     public void update() {
+        turretSystem.setTarget(gamepad2.left_stick_x*360);
         if(gamepad2.cross){
             turretSystem.turret.motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             turretSystem.turret.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -31,9 +33,7 @@ public class TurretControl extends LoopAction {
     }
 
     @Override
-    public void stop() {
-        turretSystem.setPower(0);
-    }
+    public void stop() {}
 
     @Override
     public boolean isFinished() {
