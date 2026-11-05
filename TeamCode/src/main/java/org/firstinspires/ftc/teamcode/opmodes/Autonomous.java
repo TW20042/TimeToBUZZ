@@ -29,12 +29,20 @@ public class Autonomous extends LinearOpMode {
 
         robot.pedroMovingSystem.setPose(new Pose(24, 0.7, 0));
         PoseFactory poseFactory = PoseFactory.degrees();
-        Pose start = poseFactory.of(24, 0.7, 0);
-        Pose goal = poseFactory.of(72, 72, 0);
+        Pose pose1 = poseFactory.of(0, 0, 0);
+        Pose pose2 = poseFactory.of(48, 0, 90);
+        Pose pose3 = poseFactory.of(48, 48, 180);
+        Pose pose4 = poseFactory.of(0, 48, 270);
 
-        Path path = Paths.line(start, goal).constant(start);
+        Path path1 = Paths.line(pose1, pose2).linear(pose1, pose2);
+        Path path2 = Paths.line(pose2, pose3).linear(pose1, pose2);
+        Path path3 = Paths.line(pose3, pose4).linear(pose3, pose4);
+        Path path4 = Paths.line(pose4, pose1).linear(pose4, pose1);
 
-        robot.doAction(new PedroMovingTo(path));
+        robot.doAction(new PedroMovingTo(path1));
+        robot.doAction(new PedroMovingTo(path2));
+        robot.doAction(new PedroMovingTo(path3));
+        robot.doAction(new PedroMovingTo(path4));
         waitForStart();
 
         while(opModeIsActive() && !robot.isFinished()){
